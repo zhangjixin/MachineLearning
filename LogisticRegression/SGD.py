@@ -3,19 +3,22 @@ import sys
 import numpy as np
 import math
 import random
-from SigmoidFunction import sigmoid, costDerivation
+from SigmoidFunction import sigmoid, costDerivation, costFunction
 
 def gd(dataDic, labelDic, alpha = 0.01, epochs = 150):
     trainData = np.mat(dataDic)
     labelData = np.mat(labelDic).transpose()
     m, n = np.shape(trainData)
     weights = np.ones((n,1))
-
-    for k in range(epochs):
+    cost = 1
+    #for k in range(epochs):
+    while cost > 0.01:
         h = sigmoid(trainData * weights)
         #error = (labelData - h)
+        cost = costFunction(h, labelData)
+        print(cost)
         error = costDerivation(labelData, h, trainData, weights)
-        weights = weights + alpha  *  error
+        weights = weights - alpha  *  error
     return weights
 
 def sgd(dataDic, labelDic, alpha = 0.01, epochs = 150):
